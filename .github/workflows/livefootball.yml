@@ -47,7 +47,7 @@ jobs:
       # ============================================================
       - name: "② Convert URLs to local paths in M3U_list.txt"
         run: |
-          sed -i 's|https://raw.githubusercontent.com/Love4vn/Stalker2M3U/1/||g' M3U_list.txt
+          sed -i 's|https://raw.githubusercontent.com/sani3122/Something-Special/1/||g' M3U_list.txt
 
       - name: "② Chạy footonsat_schedule_live_optimized.py"
         run: python footonsat_schedule_live_optimized.py --skip-validation

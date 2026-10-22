@@ -1,0 +1,20 @@
+# ============================================================
+      # ② FootOnSat Optimize → live_schedule_Optimize.m3u
+      # ============================================================
+      - name: "lovefootball"
+        run: |
+          sed -i 's|https://raw.githubusercontent.com/Love4vn/Stalker2M3U/1/||g' M3U_list.txt
+
+      - name: "② Chạy footonsat_schedule_live_optimized.py"
+        run: python footonsat_schedule_live_optimized.py --skip-validation
+
+      - name: "② Commit live_schedule_Optimize.m3u"
+        run: |
+          git add live_schedule_Optimize.m3u
+          git diff --cached --quiet && echo "⏭️ Không có thay đổi" && exit 0
+          git commit -m "② Update live_schedule_Optimize.m3u [skip ci]"
+          for i in 1 2 3; do
+            git pull --rebase --autostash origin 1 && git push origin 1 && exit 0
+            echo "Retry $i..."; sleep 5
+          done
+          exit 1

@@ -57,6 +57,8 @@ jobs:
           git add live_schedule_Optimize.m3u
           git diff --cached --quiet && echo "⏭️ Không có thay đổi" && exit 0
           git commit -m "② Update live_schedule_Optimize.m3u [skip ci]"
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
           for i in 1 2 3; do
             git pull --rebase --autostash origin 1 && git push origin 1 && exit 0
             echo "Retry $i..."; sleep 5

@@ -41,26 +41,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install requests curl_cffi pycountry aiohttp pyyaml
-
-      # ============================================================
-      # ① STALKER → Mac_playlist.m3u
-      # ============================================================
-      - name: "① Chạy stalker_to_m3u.py"
-        run: python stalker_to_m3u.py
-
-      - name: "① Commit Mac_playlist.m3u"
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add Mac_playlist.m3u
-          git diff --cached --quiet && echo "⏭️ Không có thay đổi" && exit 0
-          git commit -m "① Update Mac_playlist.m3u [skip ci]"
-          for i in 1 2 3; do
-            git pull --rebase --autostash origin 1 && git push origin 1 && exit 0
-            echo "Retry $i..."; sleep 5
-          done
-          exit 1
-
+      
       # ============================================================
       # ② FootOnSat Optimize → live_schedule_Optimize.m3u
       # ============================================================
@@ -81,35 +62,3 @@ jobs:
             echo "Retry $i..."; sleep 5
           done
           exit 1
-
-      # ============================================================
-      # ③ Football match live → Football_match_live.m3u
-      # ============================================================
-      - name: "③ Convert URLs to local paths in M3U_list.txt"
-        run: |
-          sed -i 's|https://raw.githubusercontent.com/Love4vn/Stalker2M3U/1/||g' M3U_list.txt
-
-      - name: "③ Chạy Football_match_live.py"
-        run: python Football_match_live.py --no-footonsat --skip-validation
-
-      - name: "③ Commit Football_match_live.m3u"
-        run: |
-          git add Football_match_live.m3u
-          git diff --cached --quiet && echo "⏭️ Không có thay đổi" && exit 0
-          git commit -m "③ Update Football_match_live.m3u [skip ci]"
-          for i in 1 2 3; do
-            git pull --rebase --autostash origin 1 && git push origin 1 && exit 0
-            echo "Retry $i..."; sleep 5
-          done
-          exit 1
-
-      # ============================================================
-      # 4. TỔNG KẾT
-      # ============================================================
-      - name: "✅ Tổng kết"
-        if: always()
-        run: |
-          echo "===== 5 commit gần nhất ====="
-          git log --oneline -5
-          echo "===== File output ====="
-          ls -lh Mac_playlist.m3u live_schedule_Optimize.m3u Football_match_live.m3u 2>/dev/null || true
